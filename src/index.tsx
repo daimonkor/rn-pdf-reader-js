@@ -2,21 +2,15 @@ import * as React from 'react'
 import * as CSS from 'csstype'
 import { View, ActivityIndicator, Platform, StyleSheet } from 'react-native'
 import { WebView } from 'react-native-webview'
-import * as FileSystem from 'expo-file-system'
 import {
   WebViewErrorEvent,
   WebViewNavigationEvent,
   WebViewSource,
   WebViewHttpErrorEvent,
 } from 'react-native-webview/lib/WebViewTypes'
+import { unlink } from 'react-native-fs'
 
-const {
-  cacheDirectory,
-  writeAsStringAsync,
-  deleteAsync,
-  getInfoAsync,
-  EncodingType,
-} = FileSystem
+var RNFS = require('react-native-fs');
 
 export type RenderType =
   | 'DIRECT_URL'
@@ -101,40 +95,48 @@ function viewerHtml(
 }
 
 // PATHS
-const bundleJsPath = `${cacheDirectory}bundle.js`
-const htmlPath = `${cacheDirectory}index.html`
-const pdfPath = `${cacheDirectory}file.pdf`
+const bundleJsPath = `file://${RNFS.CachesDirectoryPath}/bundle.js`
+const htmlPath = `file://${RNFS.CachesDirectoryPath}/index.html`
+const pdfPath = `file://${RNFS.CachesDirectoryPath}/file.pdf`
 
 async function writeWebViewReaderFileAsync(
   data: string,
   customStyle?: CustomStyle,
   withScroll?: boolean,
 ): Promise<void> {
-  const { exists, md5 } = await getInfoAsync(bundleJsPath, { md5: true })
+  var exists = false;
+  var md5 = null;
+  try {
+    exists = await RNFS.exists(bundleJsPath)
+    md5 = await RNFS.hash(bundleJsPath, 'md5')
+  }catch(e){
+    console.log(e)
+  }
+
   const bundleContainer = require('./bundleContainer')
   if (__DEV__ || !exists || bundleContainer.getBundleMd5() !== md5) {
-    await writeAsStringAsync(bundleJsPath, bundleContainer.getBundle())
+    await RNFS.writeFile(bundleJsPath, bundleContainer.getBundle())
   }
-  await writeAsStringAsync(htmlPath, viewerHtml(data, customStyle, withScroll))
+  await RNFS.writeFile(htmlPath, viewerHtml(data, customStyle, withScroll))
 }
 
 async function writePDFAsync(base64: string) {
-  await writeAsStringAsync(
+  await RNFS.writeFile(
     pdfPath,
     base64.replace('data:application/pdf;base64,', ''),
-    { encoding: EncodingType.Base64 },
+    { encoding: 'base64' },
   )
 }
 
 export async function removeFilesAsync(): Promise<void> {
-  const { exists: htmlPathExist } = await getInfoAsync(htmlPath)
+  const { exists: htmlPathExist } = await RNFS.exists(htmlPath)
   if (htmlPathExist) {
-    await deleteAsync(htmlPath)
+    await RNFS.unlink(htmlPath)
   }
 
-  const { exists: pdfPathExist } = await getInfoAsync(pdfPath)
+  const { exists: pdfPathExist } = await RNFS.exists(pdfPath)
   if (pdfPathExist) {
-    await deleteAsync(pdfPath)
+    await unlink(pdfPath)
   }
 }
 
