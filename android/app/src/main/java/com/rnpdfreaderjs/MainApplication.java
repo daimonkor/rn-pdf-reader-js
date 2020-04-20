@@ -2,8 +2,11 @@ package com.rnpdfreaderjs;
 
 import android.app.Application;
 
-import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.webview.RNCWebViewPackage;
+import com.swmansion.rnscreens.RNScreensPackage;
+import com.swmansion.reanimated.ReanimatedPackage;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.rnfs.RNFSPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -11,6 +14,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.util.Arrays;
 import java.util.List;
+import com.rnfs.RNFSPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -20,12 +24,13 @@ public class MainApplication extends Application implements ReactApplication {
       return BuildConfig.DEBUG;
     }
 
-    @Override
-    protected List<ReactPackage> getPackages() {
-      List<ReactPackage> packages = new PackageList(this).getPackages();
-
-      return packages;
-    }
+      @Override
+        protected List<ReactPackage> getPackages() {
+          return Arrays.<ReactPackage>asList(
+            new MainReactPackage(),
+            new RNCWebViewPackage(),
+            new RNFSPackage() );
+      }
 
     @Override
     protected String getJSMainModuleName() {

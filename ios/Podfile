@@ -45,4 +45,12 @@ target 'rnpdfreaderjs' do
   use_native_modules!
   pod 'RNFS', :path => '../node_modules/react-native-fs'
 
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
+  pod 'RNScreens', :path => '../node_modules/react-native-screens'
+
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
 end
