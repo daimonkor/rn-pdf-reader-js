@@ -19,7 +19,7 @@
     "cleaning": "rm -rf node_modules && rm -f yarn.lock && yarn cache clean && yarn install && watchman watch-del-all && rm -fr $TMPDIR/react-*",
     "ios": "react-native run-ios",
     "android": "react-native run-android",
-    "postinstall": "jetify"
+    "postinstall": "npx jetifier jetify"
   },
   "keywords": [
     "React-Native",
@@ -61,7 +61,6 @@
     "babel-jest": "~24.9.0",
     "crypto": "1.0.1",
     "jest": "~24.9.0",
-    "jetifier": "^1.6.5",
     "json": "^9.0.6",
     "metro-react-native-babel-preset": "~0.56.0",
     "react-native-webview": "7.4.3",
