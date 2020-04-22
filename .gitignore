@@ -62,3 +62,5 @@ lib
 .idea/
 android/.gradle/
 android/app/build/
+/ios/build/rnpdfreaderjs/
+/ios/Pods/

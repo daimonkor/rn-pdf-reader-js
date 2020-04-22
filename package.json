@@ -19,7 +19,8 @@
     "cleaning": "rm -rf node_modules && rm -f yarn.lock && yarn cache clean && yarn install && watchman watch-del-all && rm -fr $TMPDIR/react-*",
     "ios": "react-native run-ios",
     "android": "react-native run-android",
-    "postinstall": "npx jetifier jetify"
+    "postinstall": "npx jetifier jetify",
+    "reset":  ". reset.sh"
   },
   "keywords": [
     "React-Native",
@@ -36,7 +37,7 @@
   },
   "peerDependencies": {
     "react": "16.8.3",
-    "react-native": "0.59.0",
+    "react-native": "0.59.10",
     "react-native-webview": ">= 7.0.5 < 8.x"
   },
   "dependencies": {
